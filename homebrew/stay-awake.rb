@@ -10,6 +10,13 @@ cask "stay-awake" do
   # GUI App configuration
   app "Stay Awake.app"
 
+  # Automatically clear quarantine to bypass Gatekeeper's "damaged app" prompt
+  postflight do
+    system_command "xattr",
+                   args: ["-cr", "#{appdir}/Stay Awake.app"],
+                   sudo: false
+  end
+
   # Clean up app configurations and launch agents upon uninstall
   zap trash: [
     "~/Library/Application Support/StayAwake",
