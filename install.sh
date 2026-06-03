@@ -58,4 +58,10 @@ else
   echo -e "${GREEN}🎉 Stay Awake successfully installed in /Applications!${NC}"
 fi
 
+# 4. Clear the quarantine flag to bypass Gatekeeper's "damaged app" prompt for unsigned code
+if [ -d "/Applications/Stay Awake.app" ]; then
+  echo -e "${GREEN}🔓 Bypassing macOS Gatekeeper quarantine...${NC}"
+  xattr -d com.apple.quarantine "/Applications/Stay Awake.app" 2>/dev/null || true
+fi
+
 echo -e "${GREEN}✅ Done! You can now launch Stay Awake from your Applications or via Spotlight search.${NC}"
