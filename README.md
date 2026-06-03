@@ -80,13 +80,54 @@ The compiled application bundle will be created in the `build/bin/` folder (e.g.
 
 ## Installation
 
-1. Clone this repository or download the source.
-2. Run `wails build -platform darwin`.
-3. Open `build/bin/`.
+### Method 1: Using Homebrew (Recommended for Users)
+
+You can install `Stay Awake` directly using Homebrew.
+
+1. **Tap the repository**:
+   ```bash
+   brew tap princev89/tap
+   ```
+2. **Install the cask**:
+   ```bash
+   brew install --cask stay-awake
+   ```
+
+*(See [Setting Up Your Homebrew Tap](#setting-up-your-homebrew-tap) below for details on how to set up the tap repository.)*
+
+### Method 2: Manual Installation (From Source)
+
+1. Clone this repository or download the source code.
+2. Run the compilation build command:
+   ```bash
+   wails build -platform darwin
+   ```
+3. Open the build folder:
+   ```bash
+   open build/bin/
+   ```
 4. Drag `Stay Awake.app` into your `/Applications` directory.
+
+---
+
+## Setting Up Your Homebrew Tap (For Maintainers)
+
+To distribute `Stay Awake` to other users via `brew install`:
+
+1. **Create a new repository** on GitHub named `homebrew-tap` under the account `princev89`.
+2. **Create a `Casks` directory** in the root of that repository.
+3. **Copy the cask file** [stay-awake.rb](homebrew/stay-awake.rb) into the `Casks/` directory.
+4. **Publish a Release**:
+   * Build the production bundle: `wails build -platform darwin`.
+   * Compress the output `Stay Awake.app` into a `.zip` file named `Stay.Awake.zip`.
+   * Create a new Release on GitHub for `stay-awake` with tag `v1.0.0` and upload the zip file.
+5. **Update Checksum (Optional but recommended)**:
+   * Calculate the SHA256 checksum of your zip: `shasum -a 256 Stay.Awake.zip`.
+   * Replace `:no_check` with the calculated hash string in `Casks/stay-awake.rb` in your tap repository.
 
 ---
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
