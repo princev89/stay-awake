@@ -27,14 +27,14 @@ jobs:
       - name: Go Tidy
         run: go mod tidy
 
-      - name: Go Vet
-        run: go vet ./...
-
       - name: Frontend Build Verification
         run: |
           cd frontend
           npm install
           npm run build
+
+      - name: Go Vet
+        run: go vet ./...
 
   build-macos:
     name: Build macOS Binary
