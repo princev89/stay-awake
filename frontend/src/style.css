@@ -407,6 +407,12 @@ input:checked + .slider:before {
   transform: scale(1.05);
 }
 
+.update-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
 @keyframes banner-glow {
   0% { box-shadow: 0 0 5px rgba(0, 242, 254, 0.05); border-color: rgba(0, 242, 254, 0.15); }
   100% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); border-color: rgba(0, 242, 254, 0.4); }

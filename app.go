@@ -252,3 +252,19 @@ func (a *App) CheckForUpdates() map[string]interface{} {
 func (a *App) OpenReleaseUrl(url string) {
 	runtime.BrowserOpenURL(a.ctx, url)
 }
+
+func (a *App) InstallUpdate() string {
+	hasUpdate, tag, _, err := CheckForUpdate(AppVersion)
+	if err != nil {
+		return err.Error()
+	}
+	if !hasUpdate {
+		return "No update available"
+	}
+
+	err = TriggerSelfUpdate(tag)
+	if err != nil {
+		return err.Error()
+	}
+	return "Success"
+}

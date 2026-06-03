@@ -81,8 +81,22 @@ async function init() {
       if (updateStatus && updateStatus.hasUpdate) {
         updateBannerText.textContent = `New Update: ${updateStatus.latestVersion}`;
         updateBanner.classList.remove("hidden");
-        updateLinkBtn.addEventListener("click", () => {
-          window.go.main.App.OpenReleaseUrl(updateStatus.releaseUrl);
+        updateLinkBtn.textContent = "Update";
+        updateLinkBtn.addEventListener("click", async () => {
+          updateLinkBtn.disabled = true;
+          updateLinkBtn.textContent = "Updating...";
+          try {
+            const res = await window.go.main.App.InstallUpdate();
+            if (res !== "Success") {
+              alert("Update failed: " + res);
+              updateLinkBtn.disabled = false;
+              updateLinkBtn.textContent = "Update";
+            }
+          } catch (err) {
+            alert("Update error: " + err);
+            updateLinkBtn.disabled = false;
+            updateLinkBtn.textContent = "Update";
+          }
         });
       }
     } catch (updateErr) {
