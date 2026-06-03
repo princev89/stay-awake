@@ -15,11 +15,13 @@ let isAwake = false;
 function updateUI(awake) {
   isAwake = awake;
   if (awake) {
+    document.body.classList.add("awake-mode");
     powerRing.classList.remove("state-normal");
     powerRing.classList.add("state-awake");
     statusLabel.textContent = "AWAKE";
     statusDesc.textContent = "Your Mac is locked awake. Long running tasks can continue uninterrupted.";
   } else {
+    document.body.classList.remove("awake-mode");
     powerRing.classList.remove("state-awake");
     powerRing.classList.add("state-normal");
     statusLabel.textContent = "NORMAL";
