@@ -77,6 +77,13 @@ body {
   line-height: 1.6;
 }
 
+.badges {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
 /* Terminal Card Installer */
 .installer-section {
   display: flex;
