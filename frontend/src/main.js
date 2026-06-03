@@ -6,6 +6,9 @@ const statusDesc = document.getElementById("status-desc");
 const launchLoginCheck = document.getElementById("launch-login-check");
 const startMinimizedCheck = document.getElementById("start-minimized-check");
 const lidCloseCheck = document.getElementById("lid-close-check");
+const updateBanner = document.getElementById("update-banner");
+const updateBannerText = document.getElementById("update-banner-text");
+const updateLinkBtn = document.getElementById("update-link-btn");
 
 let isAwake = false;
 
@@ -75,6 +78,21 @@ async function init() {
         updateUI(awake);
       });
     }
+
+    // 5. Run GitHub update check asynchronously
+    try {
+      const updateStatus = await window.go.main.App.CheckForUpdates();
+      if (updateStatus && updateStatus.hasUpdate) {
+        updateBannerText.textContent = `New Update: ${updateStatus.latestVersion}`;
+        updateBanner.classList.remove("hidden");
+        updateLinkBtn.addEventListener("click", () => {
+          window.go.main.App.OpenReleaseUrl(updateStatus.releaseUrl);
+        });
+      }
+    } catch (updateErr) {
+      console.error("Failed to check for updates:", updateErr);
+    }
+
   } catch (err) {
     console.error("Failed to initialize Stay Awake Go bindings:", err);
   }

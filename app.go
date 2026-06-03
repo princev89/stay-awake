@@ -157,3 +157,22 @@ func (a *App) QuitApp() {
 	a.quitting = true
 	runtime.Quit(a.ctx)
 }
+
+func (a *App) CheckForUpdates() map[string]interface{} {
+	hasUpdate, tag, url, err := CheckForUpdate(AppVersion)
+	res := map[string]interface{}{
+		"currentVersion": AppVersion,
+		"hasUpdate":      hasUpdate,
+		"latestVersion":  tag,
+		"releaseUrl":     url,
+		"error":          "",
+	}
+	if err != nil {
+		res["error"] = err.Error()
+	}
+	return res
+}
+
+func (a *App) OpenReleaseUrl(url string) {
+	runtime.BrowserOpenURL(a.ctx, url)
+}

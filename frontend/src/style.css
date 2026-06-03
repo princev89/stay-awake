@@ -302,3 +302,62 @@ input:checked + .slider:before {
 .text-warning .setting-sub {
   color: #ffb067a8;
 }
+
+/* Update Banner pill styling */
+.update-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(165, 180, 252, 0.1);
+  border: 1px solid rgba(165, 180, 252, 0.25);
+  border-radius: 20px;
+  padding: 4px 10px;
+  margin-top: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #a5b4fc;
+  box-shadow: 0 0 10px rgba(165, 180, 252, 0.1);
+  animation: banner-glow 3s infinite alternate;
+}
+
+.update-banner.hidden {
+  display: none !important;
+}
+
+.update-pulse {
+  font-size: 8px;
+  animation: pulse-op 1.5s infinite alternate;
+}
+
+.update-btn {
+  background: #a5b4fc;
+  color: #0c0d12;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.update-btn:hover {
+  background: #ffffff;
+  transform: scale(1.05);
+}
+
+.update-btn:active {
+  transform: scale(0.95);
+}
+
+@keyframes banner-glow {
+  0% { box-shadow: 0 0 5px rgba(165, 180, 252, 0.05); border-color: rgba(165, 180, 252, 0.2); }
+  100% { box-shadow: 0 0 15px rgba(165, 180, 252, 0.25); border-color: rgba(165, 180, 252, 0.5); }
+}
+
+@keyframes pulse-op {
+  0% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
