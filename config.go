@@ -11,6 +11,7 @@ type AppConfig struct {
 	StartMinimized       bool `json:"startMinimized"`
 	AwakeState           bool `json:"awakeState"`
 	LidClosePreventSleep bool `json:"lidClosePreventSleep"`
+	LidCloseDimDisplay   bool `json:"lidCloseDimDisplay"`
 }
 
 func GetConfigPath() (string, error) {
@@ -37,6 +38,7 @@ func LoadConfig() (*AppConfig, error) {
 			StartMinimized:       false,
 			AwakeState:           false,
 			LidClosePreventSleep: false,
+			LidCloseDimDisplay:   false,
 		}
 		_ = SaveConfig(defaultConfig)
 		return defaultConfig, nil

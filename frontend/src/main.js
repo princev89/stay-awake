@@ -4,7 +4,6 @@ const toggleBtn = document.getElementById("toggle-btn");
 const statusLabel = document.getElementById("status-label");
 const statusDesc = document.getElementById("status-desc");
 const launchLoginCheck = document.getElementById("launch-login-check");
-const startMinimizedCheck = document.getElementById("start-minimized-check");
 const lidCloseCheck = document.getElementById("lid-close-check");
 const updateBanner = document.getElementById("update-banner");
 const updateBannerText = document.getElementById("update-banner-text");
@@ -41,16 +40,11 @@ async function init() {
     const config = await window.go.main.App.GetConfig();
     updateUI(config.awakeState);
     launchLoginCheck.checked = config.launchAtLogin;
-    startMinimizedCheck.checked = config.startMinimized;
     lidCloseCheck.checked = config.lidClosePreventSleep;
 
     // 2. Set up event listeners for settings
     launchLoginCheck.addEventListener("change", async (e) => {
       await window.go.main.App.SetLaunchAtLogin(e.target.checked);
-    });
-
-    startMinimizedCheck.addEventListener("change", async (e) => {
-      await window.go.main.App.SetStartMinimized(e.target.checked);
     });
 
     lidCloseCheck.addEventListener("change", async (e) => {

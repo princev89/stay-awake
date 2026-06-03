@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-const AppVersion = "1.0.3"
+const AppVersion = "1.0.4"
 
 type GitHubRelease struct {
 	TagName string `json:"tag_name"`

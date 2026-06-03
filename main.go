@@ -17,14 +17,14 @@ func main() {
 	err := wails.Run(&options.App{
 		Title:             "Stay Awake",
 		Width:             320,
-		Height:            440,
+		Height:            380,
 		DisableResize:     true,
 		Fullscreen:        false,
 		Frameless:         false,
 		MinWidth:          320,
-		MinHeight:         440,
+		MinHeight:         380,
 		MaxWidth:          320,
-		MaxHeight:         440,
+		MaxHeight:         380,
 		BackgroundColour:  &options.RGBA{R: 12, G: 13, B: 18, A: 255},
 		AssetServer: &assetserver.Options{
 			Assets: assets,

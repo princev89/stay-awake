@@ -22,3 +22,15 @@ func (s *SleepManager) Release() error {
 func SetLidSleepDisabled(disabled bool) error {
 	return nil
 }
+
+func GetLidClosedState() bool {
+	return false
+}
+
+func GetDisplayBrightness() float64 {
+	return 1.0
+}
+
+func SetDisplayBrightness(brightness float64) {
+}
+

@@ -10,10 +10,13 @@ import (
 var globalApp *App
 
 type App struct {
-	ctx          context.Context
-	config       *AppConfig
-	sleepManager *SleepManager
-	quitting     bool
+	ctx              context.Context
+	config           *AppConfig
+	sleepManager     *SleepManager
+	quitting         bool
+	lidClosed        bool
+	savedBrightness  float64
+	brightnessDimmed bool
 }
 
 func NewApp() *App {
@@ -58,6 +61,9 @@ func (a *App) startup(ctx context.Context) {
 			runtime.WindowHide(a.ctx)
 		}()
 	}
+
+	// Start background lid state monitor
+	a.startLidMonitor()
 }
 
 func (a *App) domReady(ctx context.Context) {
@@ -69,6 +75,7 @@ func (a *App) beforeClose(ctx context.Context) bool {
 	if a.quitting {
 		_ = a.sleepManager.Release()
 		_ = SetLidSleepDisabled(false) // Restore sleep settings on quit
+		a.restoreBrightness()          // Restore display brightness on quit
 		return false // Allow app to quit
 	}
 	// Hide window to system tray instead of closing
@@ -79,6 +86,7 @@ func (a *App) beforeClose(ctx context.Context) bool {
 func (a *App) shutdown(ctx context.Context) {
 	_ = a.sleepManager.Release()
 	_ = SetLidSleepDisabled(false) // Restore sleep settings on quit
+	a.restoreBrightness()          // Restore display brightness on quit
 }
 
 // BINDINGS - Exposed to Frontend
@@ -99,6 +107,7 @@ func (a *App) ToggleAwake(active bool) bool {
 	} else {
 		_ = a.sleepManager.Release()
 		_ = SetLidSleepDisabled(false)
+		a.restoreBrightness()
 	}
 	
 	UpdateTray(active)
@@ -128,10 +137,77 @@ func (a *App) SetLidClosePreventSleep(enabled bool) bool {
 			_ = SetLidSleepDisabled(true)
 		} else {
 			_ = SetLidSleepDisabled(false)
+			a.restoreBrightness()
 		}
 	}
 	return enabled
 }
+
+func (a *App) startLidMonitor() {
+	go func() {
+		// Wait a moment for startup to finish
+		time.Sleep(1 * time.Second)
+		ticker := time.NewTicker(2 * time.Second)
+		defer ticker.Stop()
+
+		for {
+			if a.ctx == nil {
+				time.Sleep(500 * time.Millisecond)
+				continue
+			}
+			select {
+			case <-a.ctx.Done():
+				return
+			case <-ticker.C:
+				a.checkLidState()
+			}
+		}
+	}()
+}
+
+func (a *App) checkLidState() {
+	if !a.config.AwakeState || !a.config.LidClosePreventSleep {
+		if a.brightnessDimmed {
+			a.restoreBrightness()
+		}
+		return
+	}
+
+	closed := GetLidClosedState()
+	if closed && !a.lidClosed {
+		a.lidClosed = true
+		a.dimBrightness()
+	} else if !closed && a.lidClosed {
+		a.lidClosed = false
+		a.restoreBrightness()
+	}
+}
+
+func (a *App) dimBrightness() {
+	if a.brightnessDimmed {
+		return
+	}
+	curr := GetDisplayBrightness()
+	if curr > 0.05 {
+		a.savedBrightness = curr
+	} else if a.savedBrightness <= 0.05 {
+		a.savedBrightness = 0.8
+	}
+	SetDisplayBrightness(0.0)
+	a.brightnessDimmed = true
+}
+
+func (a *App) restoreBrightness() {
+	if !a.brightnessDimmed {
+		return
+	}
+	if a.savedBrightness > 0.0 {
+		SetDisplayBrightness(a.savedBrightness)
+	}
+	a.brightnessDimmed = false
+	a.lidClosed = false
+}
+
 
 // TRAY CONTROLS - Triggered by native Objective-C callbacks
 
