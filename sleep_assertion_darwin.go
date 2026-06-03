@@ -7,6 +7,14 @@ package main
 #include <CoreFoundation/CoreFoundation.h>
 #include <stdlib.h>
 
+static CFStringRef createCFString(const char* cstr) {
+    return CFStringCreateWithCString(kCFAllocatorDefault, cstr, kCFStringEncodingUTF8);
+}
+
+static int isNullCFString(CFStringRef str) {
+    return str == NULL;
+}
+
 static IOReturn createSleepAssertion(CFStringRef reason, IOPMAssertionID *assertionID) {
     return IOPMAssertionCreateWithName(kIOPMAssertionTypeNoIdleSleep, kIOPMAssertionLevelOn, reason, assertionID);
 }
@@ -42,8 +50,8 @@ func (s *SleepManager) Acquire(reason string) error {
 	reasonC := C.CString(reason)
 	defer C.free(unsafe.Pointer(reasonC))
 	
-	reasonStr := C.CFStringCreateWithCString(nil, reasonC, C.kCFStringEncodingUTF8)
-	if reasonStr != nil {
+	reasonStr := C.createCFString(reasonC)
+	if C.isNullCFString(reasonStr) == 0 {
 		defer C.CFRelease(C.CFTypeRef(reasonStr))
 		
 		var assID C.IOPMAssertionID

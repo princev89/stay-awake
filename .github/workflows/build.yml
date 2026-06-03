@@ -24,6 +24,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Go Tidy
+        run: go mod tidy
+
       - name: Go Vet
         run: go vet ./...
 
@@ -52,6 +55,9 @@ jobs:
 
       - name: Install Wails CLI
         run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.9.1
+
+      - name: Go Tidy
+        run: go mod tidy
 
       - name: Build macOS Application Bundle
         run: |
