@@ -1,0 +1,296 @@
+:root {
+  --bg-color: #0c0d12;
+  --container-bg: rgba(18, 20, 32, 0.6);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --text-primary: #ffffff;
+  --text-secondary: #9094a6;
+  --accent-active: #00f2fe;
+  --accent-active-gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+  --accent-inactive: #3a3f58;
+  --glow-active: rgba(0, 242, 254, 0.35);
+  --glow-active-deep: rgba(0, 242, 254, 0.15);
+  --glow-inactive: rgba(255, 255, 255, 0.02);
+  --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at top right, #171c32 0%, #0c0d12 70%);
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* App Glass Container */
+.app-container {
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  background: var(--container-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Header */
+.app-header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.logo-icon {
+  font-size: 24px;
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+  animation: logo-float 3s ease-in-out infinite;
+}
+
+.app-header h1 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(to right, #ffffff, #dcdce6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app-description {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+/* Control Panel */
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  gap: 20px;
+}
+
+.power-ring-container {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.power-ring {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+/* Normal State Ring */
+.power-ring.state-normal {
+  border: 3px solid var(--accent-inactive);
+  box-shadow: 0 0 15px var(--glow-inactive), inset 0 0 15px var(--glow-inactive);
+}
+
+/* Awake State Ring (Neon Glow & Pulsing) */
+.power-ring.state-awake {
+  border: 3px solid var(--accent-active);
+  box-shadow: 0 0 25px var(--glow-active), inset 0 0 15px var(--glow-active);
+  animation: awake-pulse 2s infinite alternate;
+}
+
+/* Floating animation for glowing pulse */
+@keyframes awake-pulse {
+  0% {
+    box-shadow: 0 0 15px var(--glow-active), inset 0 0 10px var(--glow-active-deep);
+    border-color: rgba(0, 242, 254, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 35px var(--glow-active), inset 0 0 25px var(--glow-active);
+    border-color: rgba(0, 242, 254, 1);
+  }
+}
+
+@keyframes logo-float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Power Button Inner Styling */
+.power-button {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.power-ring.state-normal .power-button {
+  background: linear-gradient(135deg, #1f2335 0%, #161823 100%);
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.power-ring.state-awake .power-button {
+  background: var(--accent-active-gradient);
+  color: #0c0d12;
+  box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4);
+}
+
+.power-button:active {
+  transform: scale(0.94);
+}
+
+.power-button svg {
+  transition: transform 0.4s ease;
+}
+
+.power-ring.state-awake .power-button svg {
+  transform: rotate(180deg);
+}
+
+/* Status Box */
+.status-box {
+  text-align: center;
+}
+
+.status-label {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  transition: color 0.4s ease;
+}
+
+.state-awake ~ .status-box .status-label {
+  color: var(--accent-active);
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+}
+
+.state-normal ~ .status-box .status-label {
+  color: var(--text-secondary);
+}
+
+.status-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 300;
+  max-width: 220px;
+  line-height: 1.4;
+  margin: 0 auto;
+}
+
+/* Settings Panel */
+.settings-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.setting-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.setting-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.setting-sub {
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+/* Toggle Switch Styles */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 18px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--accent-inactive);
+  transition: .3s;
+  border-radius: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+input:checked + .slider {
+  background-color: var(--accent-active);
+}
+
+input:checked + .slider:before {
+  transform: translateX(14px);
+  background-color: #0c0d12;
+}

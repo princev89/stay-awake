@@ -1,0 +1,1 @@
+This is a placeholder file to ensure the go:embed directive doesn't fail before the frontend has been built.

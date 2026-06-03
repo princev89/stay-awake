@@ -1,0 +1,24 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "Stay Awake",
+  "outputfilename": "Stay Awake",
+  "frontend:dir": "frontend",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "Stay Awake Authors",
+    "email": "support@stayawake.app"
+  },
+  "info": {
+    "companyName": "Stay Awake",
+    "productName": "Stay Awake",
+    "productVersion": "1.0.0",
+    "copyright": "Copyright 2026 Stay Awake Authors"
+  },
+  "wailsjsdir": "./frontend/src",
+  "bind": [
+    "App"
+  ]
+}
