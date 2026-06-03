@@ -1,0 +1,49 @@
+name: Release Stay Awake
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger when pushing a tag like v1.0.0 or v1.1.2
+
+permissions:
+  contents: write # Crucial: Allows GitHub Actions to create the release and upload the zip asset
+
+jobs:
+  release:
+    name: Build & Publish macOS App Bundle
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Wails CLI
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.9.1
+
+      - name: Compile and Bundle macOS Application
+        run: |
+          export PATH=$PATH:$(go env GOPATH)/bin
+          wails build -platform darwin
+
+      - name: Compress App Bundle into Zip File
+        run: |
+          cd build/bin
+          zip -r Stay.Awake.zip "Stay Awake.app"
+
+      - name: Create GitHub Release and Upload Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/bin/Stay.Awake.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
