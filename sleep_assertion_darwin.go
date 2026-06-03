@@ -95,3 +95,15 @@ func (s *SleepManager) Release() error {
 	s.active = false
 	return nil
 }
+
+func SetLidSleepDisabled(disabled bool) error {
+	var val string
+	if disabled {
+		val = "1"
+	} else {
+		val = "0"
+	}
+	script := fmt.Sprintf(`do shell script "pmset -a disablesleep %s" with administrator privileges`, val)
+	cmd := exec.Command("osascript", "-e", script)
+	return cmd.Run()
+}

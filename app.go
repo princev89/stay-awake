@@ -42,6 +42,9 @@ func (a *App) startup(ctx context.Context) {
 	// Restore last awake state
 	if a.config.AwakeState {
 		_ = a.sleepManager.Acquire("Stay Awake Active")
+		if a.config.LidClosePreventSleep {
+			_ = SetLidSleepDisabled(true)
+		}
 		UpdateTray(true)
 	} else {
 		UpdateTray(false)
@@ -65,6 +68,7 @@ func (a *App) domReady(ctx context.Context) {
 func (a *App) beforeClose(ctx context.Context) bool {
 	if a.quitting {
 		_ = a.sleepManager.Release()
+		_ = SetLidSleepDisabled(false) // Restore sleep settings on quit
 		return false // Allow app to quit
 	}
 	// Hide window to system tray instead of closing
@@ -74,6 +78,7 @@ func (a *App) beforeClose(ctx context.Context) bool {
 
 func (a *App) shutdown(ctx context.Context) {
 	_ = a.sleepManager.Release()
+	_ = SetLidSleepDisabled(false) // Restore sleep settings on quit
 }
 
 // BINDINGS - Exposed to Frontend
@@ -88,8 +93,12 @@ func (a *App) ToggleAwake(active bool) bool {
 	
 	if active {
 		_ = a.sleepManager.Acquire("Stay Awake Active")
+		if a.config.LidClosePreventSleep {
+			_ = SetLidSleepDisabled(true)
+		}
 	} else {
 		_ = a.sleepManager.Release()
+		_ = SetLidSleepDisabled(false)
 	}
 	
 	UpdateTray(active)
@@ -106,6 +115,21 @@ func (a *App) SetLaunchAtLogin(enabled bool) bool {
 func (a *App) SetStartMinimized(enabled bool) bool {
 	a.config.StartMinimized = enabled
 	_ = SaveConfig(a.config)
+	return enabled
+}
+
+func (a *App) SetLidClosePreventSleep(enabled bool) bool {
+	a.config.LidClosePreventSleep = enabled
+	_ = SaveConfig(a.config)
+	
+	// If currently awake, apply or remove the sleep block immediately
+	if a.config.AwakeState {
+		if enabled {
+			_ = SetLidSleepDisabled(true)
+		} else {
+			_ = SetLidSleepDisabled(false)
+		}
+	}
 	return enabled
 }
 

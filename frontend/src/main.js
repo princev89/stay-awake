@@ -5,6 +5,7 @@ const statusLabel = document.getElementById("status-label");
 const statusDesc = document.getElementById("status-desc");
 const launchLoginCheck = document.getElementById("launch-login-check");
 const startMinimizedCheck = document.getElementById("start-minimized-check");
+const lidCloseCheck = document.getElementById("lid-close-check");
 
 let isAwake = false;
 
@@ -38,6 +39,7 @@ async function init() {
     updateUI(config.awakeState);
     launchLoginCheck.checked = config.launchAtLogin;
     startMinimizedCheck.checked = config.startMinimized;
+    lidCloseCheck.checked = config.lidClosePreventSleep;
 
     // 2. Set up event listeners for settings
     launchLoginCheck.addEventListener("change", async (e) => {
@@ -46,6 +48,18 @@ async function init() {
 
     startMinimizedCheck.addEventListener("change", async (e) => {
       await window.go.main.App.SetStartMinimized(e.target.checked);
+    });
+
+    lidCloseCheck.addEventListener("change", async (e) => {
+      const targetState = e.target.checked;
+      try {
+        const approved = await window.go.main.App.SetLidClosePreventSleep(targetState);
+        e.target.checked = approved;
+      } catch (err) {
+        // Revert switch on cancel or authorization error
+        e.target.checked = !targetState;
+        console.error("Authorization failed or canceled:", err);
+      }
     });
 
     // 3. Set up button toggle action

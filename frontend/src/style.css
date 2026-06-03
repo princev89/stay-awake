@@ -294,3 +294,11 @@ input:checked + .slider:before {
   transform: translateX(14px);
   background-color: #0c0d12;
 }
+
+.text-warning .setting-title {
+  color: #ffb067;
+}
+
+.text-warning .setting-sub {
+  color: #ffb067a8;
+}

@@ -33,7 +33,7 @@ else
   # 3. Fallback: Manual install from GitHub Releases (for non-developer users without Homebrew)
   echo -e "${YELLOW}⚠️ Homebrew not detected. Installing manually from GitHub Releases...${NC}"
   
-  VERSION="1.0.1"
+  VERSION="1.0.2"
   DOWNLOAD_URL="https://github.com/princev89/stay-awake/releases/download/v${VERSION}/Stay.Awake.zip"
   TEMP_DIR=$(mktemp -d)
   

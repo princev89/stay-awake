@@ -18,3 +18,7 @@ func (s *SleepManager) Release() error {
 	s.active = false
 	return nil
 }
+
+func SetLidSleepDisabled(disabled bool) error {
+	return nil
+}

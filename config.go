@@ -7,9 +7,10 @@ import (
 )
 
 type AppConfig struct {
-	LaunchAtLogin  bool `json:"launchAtLogin"`
-	StartMinimized bool `json:"startMinimized"`
-	AwakeState     bool `json:"awakeState"`
+	LaunchAtLogin        bool `json:"launchAtLogin"`
+	StartMinimized       bool `json:"startMinimized"`
+	AwakeState           bool `json:"awakeState"`
+	LidClosePreventSleep bool `json:"lidClosePreventSleep"`
 }
 
 func GetConfigPath() (string, error) {
@@ -32,9 +33,10 @@ func LoadConfig() (*AppConfig, error) {
 	
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		defaultConfig := &AppConfig{
-			LaunchAtLogin:  false,
-			StartMinimized: false,
-			AwakeState:     false,
+			LaunchAtLogin:        false,
+			StartMinimized:       false,
+			AwakeState:           false,
+			LidClosePreventSleep: false,
 		}
 		_ = SaveConfig(defaultConfig)
 		return defaultConfig, nil
