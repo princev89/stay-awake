@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stay Awake — Keep your Mac awake during long tasks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="icon" type="image/png" href="./logo.png">
+</head>
+<body>
+  <div class="container">
+    <!-- Hero / Header -->
+    <header class="hero">
+      <img src="./logo.png" alt="Stay Awake Logo" class="logo">
+      <h1>Stay Awake ⚡</h1>
+      <p class="tagline">Keep your Mac awake while AI agents, builds, downloads, and long-running development tasks continue running.</p>
+    </header>
+
+    <!-- Installer Terminal Component -->
+    <section class="installer-section">
+      <div class="terminal-card">
+        <div class="terminal-header">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="terminal-title">bash - macOS Installer</span>
+        </div>
+        <div class="terminal-body">
+          <span class="prompt">$</span>
+          <code id="install-cmd">curl -fsSL https://raw.githubusercontent.com/princev89/stay-awake/main/install.sh | bash</code>
+          <button id="copy-btn" class="copy-button" aria-label="Copy installation command">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="copy-icon">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="copy-text">Copy</span>
+          </button>
+        </div>
+      </div>
+      <p class="installer-help">Copy and paste this command in your macOS Terminal. Works with Homebrew or standalone manual install.</p>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Native Power Assertions</h3>
+        <p>Uses Apple's native <code>IOPMAssertionCreateWithName</code> APIs under the hood. Displays can sleep safely while the system stays locked awake.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">☕</div>
+        <h3>Caffeinate Fallback</h3>
+        <p>If native power registration fails or is sandboxed, it automatically falls back to standard background <code>caffeinate</code> commands.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔌</div>
+        <h3>Menu Bar Sync</h3>
+        <p>A native status bar menu item lets you toggle awake status, restore the UI, or quit the utility directly from the macOS menu bar.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">💾</div>
+        <h3>Auto-Persisted Configs</h3>
+        <p>Automatically remembers your preferences including launch-at-login state, minimized startup, and previous toggle state.</p>
+      </div>
+    </section>
+
+    <!-- Developer Notes / Documentation -->
+    <section class="docs">
+      <h2>Advanced Usage</h2>
+      <div class="docs-block">
+        <p>If you prefer using <strong>Homebrew Cask</strong> directly, you can install with:</p>
+        <pre><code>brew install --cask princev89/tap/stay-awake</code></pre>
+      </div>
+      
+      <div class="docs-block">
+        <p>To upgrade the application in the future:</p>
+        <pre><code>brew upgrade stay-awake</code></pre>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Released under the <a href="https://github.com/princev89/stay-awake/blob/main/LICENSE" target="_blank">MIT License</a>.</p>
+      <p><a href="https://github.com/princev89/stay-awake" class="github-link" target="_blank">View on GitHub</a></p>
+    </footer>
+  </div>
+
+  <script>
+    const copyBtn = document.getElementById('copy-btn');
+    const copyText = document.getElementById('copy-text');
+    const installCmd = document.getElementById('install-cmd');
+
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(installCmd.textContent);
+        copyText.textContent = 'Copied!';
+        copyBtn.classList.add('success');
+        
+        setTimeout(() => {
+          copyText.textContent = 'Copy';
+          copyBtn.classList.remove('success');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy to clipboard:', err);
+      }
+    });
+  </script>
+</body>
+</html>
